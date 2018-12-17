@@ -6,8 +6,8 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {Directionality} from '@angular/cdk/bidi';
-import {ListRange} from '@angular/cdk/collections';
+import { Directionality } from '@angular/cdk/bidi';
+import { ListRange } from '@angular/cdk/collections';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -23,12 +23,12 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import {animationFrameScheduler, Observable, Subject, Observer} from 'rxjs';
-import {auditTime, startWith, takeUntil} from 'rxjs/operators';
-import {ScrollDispatcher} from './scroll-dispatcher';
-import {CdkScrollable, ExtendedScrollToOptions} from './scrollable';
-import {CdkVirtualForOf} from './virtual-for-of';
-import {VIRTUAL_SCROLL_STRATEGY, VirtualScrollStrategy} from './virtual-scroll-strategy';
+import { animationFrameScheduler, Observable, Subject, Observer } from 'rxjs';
+import { auditTime, startWith, takeUntil } from 'rxjs/operators';
+import { ScrollDispatcher } from './scroll-dispatcher';
+import { CdkScrollable, ExtendedScrollToOptions } from './scrollable';
+import { CdkVirtualForOf } from './virtual-for-of';
+import { VIRTUAL_SCROLL_STRATEGY, VirtualScrollStrategy } from './virtual-scroll-strategy';
 
 
 /** Checks if the given ranges are equal. */
@@ -71,9 +71,9 @@ export class CdkVirtualScrollViewport extends CdkScrollable implements OnInit, O
   // performance.
   /** Emits when the index of the first element visible in the viewport changes. */
   @Output() scrolledIndexChange: Observable<number> =
-      Observable.create((observer: Observer<number>) =>
-        this._scrollStrategy.scrolledIndexChange.subscribe(index =>
-            Promise.resolve().then(() => this.ngZone.run(() => observer.next(index)))));
+    Observable.create((observer: Observer<number>) =>
+      this._scrollStrategy.scrolledIndexChange.subscribe(index =>
+        Promise.resolve().then(() => this.ngZone.run(() => observer.next(index)))));
 
   /** The element that wraps the rendered content. */
   @ViewChild('contentWrapper') _contentWrapper: ElementRef<HTMLElement>;
@@ -99,7 +99,7 @@ export class CdkVirtualScrollViewport extends CdkScrollable implements OnInit, O
   private _renderedContentTransform: string;
 
   /** The currently rendered range of indices. */
-  private _renderedRange: ListRange = {start: 0, end: 0};
+  private _renderedRange: ListRange = { start: 0, end: 0 };
 
   /** The length of the data bound to this viewport (in number of items). */
   private _dataLength = 0;
@@ -126,12 +126,12 @@ export class CdkVirtualScrollViewport extends CdkScrollable implements OnInit, O
   private _runAfterChangeDetection: Function[] = [];
 
   constructor(public elementRef: ElementRef<HTMLElement>,
-              private _changeDetectorRef: ChangeDetectorRef,
-              ngZone: NgZone,
-              @Optional() @Inject(VIRTUAL_SCROLL_STRATEGY)
-                  private _scrollStrategy: VirtualScrollStrategy,
-              @Optional() dir: Directionality,
-              scrollDispatcher: ScrollDispatcher) {
+    private _changeDetectorRef: ChangeDetectorRef,
+    ngZone: NgZone,
+    @Optional() @Inject(VIRTUAL_SCROLL_STRATEGY)
+    private _scrollStrategy: VirtualScrollStrategy,
+    @Optional() dir: Directionality,
+    scrollDispatcher: ScrollDispatcher) {
     super(elementRef, scrollDispatcher, ngZone, dir);
 
     if (!_scrollStrategy) {
@@ -151,14 +151,14 @@ export class CdkVirtualScrollViewport extends CdkScrollable implements OnInit, O
       this._scrollStrategy.attach(this);
 
       this.elementScrolled()
-          .pipe(
-              // Start off with a fake scroll event so we properly detect our initial position.
-              startWith<Event | null>(null!),
-              // Collect multiple events into one until the next animation frame. This way if
-              // there are multiple scroll events in the same frame we only need to recheck
-              // our layout once.
-              auditTime(0, animationFrameScheduler))
-          .subscribe(() => this._scrollStrategy.onContentScrolled());
+        .pipe(
+          // Start off with a fake scroll event so we properly detect our initial position.
+          startWith<Event | null>(null!),
+          // Collect multiple events into one until the next animation frame. This way if
+          // there are multiple scroll events in the same frame we only need to recheck
+          // our layout once.
+          auditTime(0, animationFrameScheduler))
+        .subscribe(() => this._scrollStrategy.onContentScrolled());
 
       this._markChangeDetectionNeeded();
     }));
@@ -295,7 +295,7 @@ export class CdkVirtualScrollViewport extends CdkScrollable implements OnInit, O
    * @param behavior The ScrollBehavior to use when scrolling. Default is behavior is `auto`.
    */
   scrollToOffset(offset: number, behavior: ScrollBehavior = 'auto') {
-    const options: ExtendedScrollToOptions = {behavior};
+    const options: ExtendedScrollToOptions = { behavior };
     if (this.orientation === 'horizontal') {
       options.start = offset;
     } else {
@@ -309,7 +309,7 @@ export class CdkVirtualScrollViewport extends CdkScrollable implements OnInit, O
    * @param index The index of the element to scroll to.
    * @param behavior The ScrollBehavior to use when scrolling. Default is behavior is `auto`.
    */
-  scrollToIndex(index: number,  behavior: ScrollBehavior = 'auto') {
+  scrollToIndex(index: number, behavior: ScrollBehavior = 'auto') {
     this._scrollStrategy.scrollToIndex(index, behavior);
   }
 
@@ -320,7 +320,7 @@ export class CdkVirtualScrollViewport extends CdkScrollable implements OnInit, O
    */
   measureScrollOffset(from?: 'top' | 'left' | 'right' | 'bottom' | 'start' | 'end'): number {
     return super.measureScrollOffset(
-        from ? from : this.orientation === 'horizontal' ? 'start' : 'top');
+      from ? from : this.orientation === 'horizontal' ? 'start' : 'top');
   }
 
   /** Measure the combined size of all of the rendered items. */
@@ -351,7 +351,7 @@ export class CdkVirtualScrollViewport extends CdkScrollable implements OnInit, O
   private _measureViewportSize() {
     const viewportEl = this.elementRef.nativeElement;
     this._viewportSize = this.orientation === 'horizontal' ?
-        viewportEl.clientWidth : viewportEl.clientHeight;
+      viewportEl.clientWidth : viewportEl.clientHeight;
   }
 
   /** Queue up change detection to run. */
@@ -386,7 +386,9 @@ export class CdkVirtualScrollViewport extends CdkScrollable implements OnInit, O
 
     const runAfterChangeDetection = this._runAfterChangeDetection;
     this._runAfterChangeDetection = [];
-    for (const fn of runAfterChangeDetection) {
+    // for (const fn of runAfterChangeDetection) {
+    for (let i = 0, l = runAfterChangeDetection.length; i < l; i++) {
+      const fn = runAfterChangeDetection[i];
       fn();
     }
   }

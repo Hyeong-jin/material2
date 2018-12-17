@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {Tree} from '@angular-devkit/schematics';
+import { Tree } from '@angular-devkit/schematics';
 
 /**
  * Gets all tsconfig paths from a CLI project by reading the workspace configuration
@@ -24,19 +24,22 @@ export function getProjectTsConfigPaths(tree: Tree): string[] {
   const workspace = getWorkspaceConfigGracefully(tree);
 
   if (workspace) {
-    for (const project of Object.values<any>(workspace.projects)) {
+    const projects = Object.values<any>(workspace.projects);
+    // for (const project of Object.values<any>(workspace.projects)) {
+    for (let i = 0, l = projects.length; i < l; i++) {
+      const project = projects[i];
       ['build', 'test'].forEach(targetName => {
         if (project.targets &&
-            project.targets[targetName] &&
-            project.targets[targetName].options &&
-            project.targets[targetName].options.tsConfig) {
+          project.targets[targetName] &&
+          project.targets[targetName].options &&
+          project.targets[targetName].options.tsConfig) {
           tsconfigPaths.add(project.targets[targetName].options.tsConfig);
         }
 
         if (project.architect &&
-            project.architect[targetName] &&
-            project.architect[targetName].options &&
-            project.architect[targetName].options.tsConfig) {
+          project.architect[targetName] &&
+          project.architect[targetName].options &&
+          project.architect[targetName].options.tsConfig) {
           tsconfigPaths.add(project.architect[targetName].options.tsConfig);
         }
       });

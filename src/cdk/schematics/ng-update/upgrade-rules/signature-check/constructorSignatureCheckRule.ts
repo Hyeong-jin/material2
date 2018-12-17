@@ -6,11 +6,11 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {bold, green} from 'chalk';
-import {RuleFailure, Rules, WalkContext} from 'tslint';
+import { bold, green } from 'chalk';
+import { RuleFailure, Rules, WalkContext } from 'tslint';
 import * as ts from 'typescript';
-import {ConstructorChecksUpgradeData} from '../../data/constructor-checks';
-import {getAllChanges} from '../../upgrade-data';
+import { ConstructorChecksUpgradeData } from '../../data/constructor-checks';
+import { getAllChanges } from '../../upgrade-data';
 
 /**
  * List of diagnostic codes that refer to pre-emit diagnostics which indicate invalid
@@ -35,7 +35,7 @@ export class Rule extends Rules.TypedRule {
     // we don't keep track of the new signature and don't want to update incrementally.
     // See: https://github.com/angular/material2/pull/12970#issuecomment-418337566
     const data = getAllChanges<ConstructorChecksUpgradeData>
-        (this.getOptions().ruleArguments[1].constructorChecks);
+      (this.getOptions().ruleArguments[1].constructorChecks);
     return this.applyWithFunction(sourceFile, visitSourceFile, data, program);
   }
 }
@@ -50,7 +50,7 @@ export class Rule extends Rules.TypedRule {
  * See related issue: https://github.com/Microsoft/TypeScript/issues/9879
  */
 function visitSourceFile(context: WalkContext<ConstructorChecksUpgradeData[]>,
-                         program: ts.Program) {
+  program: ts.Program) {
   // List of classes of which the constructor signature has changed.
   const signatureChangeData = context.options;
   const sourceFile = context.sourceFile;
@@ -58,7 +58,9 @@ function visitSourceFile(context: WalkContext<ConstructorChecksUpgradeData[]>,
     .filter(diagnostic => signatureErrorDiagnostics.includes(diagnostic.code))
     .filter(diagnostic => diagnostic.start !== undefined);
 
-  for (const diagnostic of diagnostics) {
+  // for (const diagnostic of diagnostics) {
+  for (let i = 0, l = diagnostics.length; i < l; i++) {
+    const diagnostic = diagnostics[i];
     const node = findConstructorNode(diagnostic, sourceFile);
 
     if (!node) {
@@ -81,7 +83,7 @@ function visitSourceFile(context: WalkContext<ConstructorChecksUpgradeData[]>,
     // Besides checking the signature class names, we need to check the actual class name because
     // there can be classes without an explicit constructor.
     if (!signatureChangeData.includes(className) &&
-        !signatureClassNames.some(name => signatureChangeData.includes(name!))) {
+      !signatureClassNames.some(name => signatureChangeData.includes(name!))) {
       continue;
     }
 
@@ -113,7 +115,7 @@ function getParameterTypesFromSignature(signature: ts.Signature, program: ts.Pro
  * expression node that is captured by the specified diagnostic.
  */
 function findConstructorNode(diagnostic: ts.Diagnostic, sourceFile: ts.SourceFile):
-    ts.CallExpression | ts.NewExpression | null {
+  ts.CallExpression | ts.NewExpression | null {
 
   let resolvedNode: ts.Node | null = null;
 
@@ -123,7 +125,7 @@ function findConstructorNode(diagnostic: ts.Diagnostic, sourceFile: ts.SourceFil
     if (node.getStart() <= diagnostic.start! && node.getEnd() >= diagnostic.start!) {
 
       if (ts.isNewExpression(node) ||
-         (ts.isCallExpression(node) && node.expression.kind === ts.SyntaxKind.SuperKeyword)) {
+        (ts.isCallExpression(node) && node.expression.kind === ts.SyntaxKind.SuperKeyword)) {
         resolvedNode = node;
       }
 

@@ -226,8 +226,10 @@ export class FlexibleConnectedPositionStrategy implements PositionStrategy {
 
     // Go through each of the preferred positions looking for a good fit.
     // If a good fit is found, it will be applied immediately.
-    for (let pos of this._preferredPositions) {
-      // Get the exact (x, y) coordinate for the point-of-origin on the origin element.
+    // for (let pos of this._preferredPositions) {
+      for (let i=0,l=this._preferredPositions.length; i<l; i++) {
+        let pos = this._preferredPositions[i];
+        // Get the exact (x, y) coordinate for the point-of-origin on the origin element.
       let originPoint = this._getOriginPoint(originRect, pos);
 
       // From that point-of-origin, get the exact (x, y) coordinate for the top-left corner of the
@@ -273,8 +275,10 @@ export class FlexibleConnectedPositionStrategy implements PositionStrategy {
     if (flexibleFits.length) {
       let bestFit: FlexibleFit | null = null;
       let bestScore = -1;
-      for (const fit of flexibleFits) {
-        const score =
+      // for (const fit of flexibleFits) {
+        for (let i=0,l=flexibleFits.length; i<l; i++) {
+          const fit = flexibleFits[i];
+          const score =
             fit.boundingBoxRect.width * fit.boundingBoxRect.height * (fit.position.weight || 1);
         if (score > bestScore) {
           bestScore = score;

@@ -6,9 +6,9 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {FocusableOption, FocusKeyManager} from '@angular/cdk/a11y';
-import {coerceBooleanProperty} from '@angular/cdk/coercion';
-import {SelectionModel} from '@angular/cdk/collections';
+import { FocusableOption, FocusKeyManager } from '@angular/cdk/a11y';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import { SelectionModel } from '@angular/cdk/collections';
 import {
   SPACE,
   ENTER,
@@ -45,20 +45,20 @@ import {
   setLines,
   mixinDisableRipple,
 } from '@angular/material/core';
-import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {Subscription} from 'rxjs';
-import {MatListAvatarCssMatStyler, MatListIconCssMatStyler} from './list';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { MatListAvatarCssMatStyler, MatListIconCssMatStyler } from './list';
 
 
 /** @docs-private */
-export class MatSelectionListBase {}
+export class MatSelectionListBase { }
 export const _MatSelectionListMixinBase: CanDisableRippleCtor & typeof MatSelectionListBase =
-    mixinDisableRipple(MatSelectionListBase);
+  mixinDisableRipple(MatSelectionListBase);
 
 /** @docs-private */
-export class MatListOptionBase {}
+export class MatListOptionBase { }
 export const _MatListOptionMixinBase: CanDisableRippleCtor & typeof MatListOptionBase =
-    mixinDisableRipple(MatListOptionBase);
+  mixinDisableRipple(MatListOptionBase);
 
 /** @docs-private */
 export const MAT_SELECTION_LIST_VALUE_ACCESSOR: any = {
@@ -73,7 +73,7 @@ export class MatSelectionListChange {
     /** Reference to the selection list that emitted the event. */
     public source: MatSelectionList,
     /** Reference to the option that has been changed. */
-    public option: MatListOption) {}
+    public option: MatListOption) { }
 }
 
 /**
@@ -103,7 +103,7 @@ export class MatSelectionListChange {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MatListOption extends _MatListOptionMixinBase
-    implements AfterContentInit, OnDestroy, OnInit, FocusableOption, CanDisableRipple {
+  implements AfterContentInit, OnDestroy, OnInit, FocusableOption, CanDisableRipple {
 
   private _selected = false;
   private _disabled = false;
@@ -147,9 +147,9 @@ export class MatListOption extends _MatListOptionMixinBase
   }
 
   constructor(private _element: ElementRef<HTMLElement>,
-              private _changeDetector: ChangeDetectorRef,
-              /** @docs-private */
-              @Inject(forwardRef(() => MatSelectionList)) public selectionList: MatSelectionList) {
+    private _changeDetector: ChangeDetectorRef,
+    /** @docs-private */
+    @Inject(forwardRef(() => MatSelectionList)) public selectionList: MatSelectionList) {
     super();
   }
 
@@ -290,7 +290,7 @@ export class MatListOption extends _MatListOptionMixinBase
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MatSelectionList extends _MatSelectionListMixinBase implements FocusableOption,
-    CanDisableRipple, AfterContentInit, ControlValueAccessor, OnDestroy {
+  CanDisableRipple, AfterContentInit, ControlValueAccessor, OnDestroy {
 
   /** The FocusKeyManager which handles focus. */
   _keyManager: FocusKeyManager<MatListOption>;
@@ -300,7 +300,7 @@ export class MatSelectionList extends _MatSelectionListMixinBase implements Focu
 
   /** Emits a change event whenever the selected state of an option changes. */
   @Output() readonly selectionChange: EventEmitter<MatSelectionListChange> =
-      new EventEmitter<MatSelectionListChange>();
+    new EventEmitter<MatSelectionListChange>();
 
   /** Tabindex of the selection list. */
   @Input() tabIndex: number = 0;
@@ -332,16 +332,16 @@ export class MatSelectionList extends _MatSelectionListMixinBase implements Focu
   selectedOptions: SelectionModel<MatListOption> = new SelectionModel<MatListOption>(true);
 
   /** View to model callback that should be called whenever the selected options change. */
-  private _onChange: (value: any) => void = (_: any) => {};
+  private _onChange: (value: any) => void = (_: any) => { };
 
   /** Used for storing the values that were assigned before the options were initialized. */
-  private _tempValues: string[]|null;
+  private _tempValues: string[] | null;
 
   /** Subscription to sync value changes in the SelectionModel back to the SelectionList. */
   private _modelChanges = Subscription.EMPTY;
 
   /** View to model callback that should be called if the list or its options lost focus. */
-  _onTouched: () => void = () => {};
+  _onTouched: () => void = () => { };
 
   constructor(private _element: ElementRef<HTMLElement>, @Attribute('tabindex') tabIndex: string) {
     super();
@@ -365,13 +365,17 @@ export class MatSelectionList extends _MatSelectionListMixinBase implements Focu
     // Sync external changes to the model back to the options.
     this._modelChanges = this.selectedOptions.onChange.subscribe(event => {
       if (event.added) {
-        for (let item of event.added) {
+        // for (let item of event.added) {
+        for (let i = 0, l = event.added.length; i < l; i++) {
+          const item = event.added[i];
           item.selected = true;
         }
       }
 
       if (event.removed) {
-        for (let item of event.removed) {
+        // for (let item of event.removed) {
+        for (let i = 0, l = event.removed.length; i < l; i++) {
+          const item = event.removed[i];
           item.selected = false;
         }
       }
@@ -455,7 +459,7 @@ export class MatSelectionList extends _MatSelectionListMixinBase implements Focu
     }
 
     if ((keyCode === UP_ARROW || keyCode === DOWN_ARROW) && event.shiftKey &&
-        manager.activeItemIndex !== previousFocusIndex) {
+      manager.activeItemIndex !== previousFocusIndex) {
       this._toggleFocusedOption();
     }
   }

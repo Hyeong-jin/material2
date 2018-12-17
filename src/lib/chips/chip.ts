@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {FocusableOption} from '@angular/cdk/a11y';
-import {coerceBooleanProperty} from '@angular/cdk/coercion';
-import {BACKSPACE, DELETE, SPACE} from '@angular/cdk/keycodes';
-import {Platform} from '@angular/cdk/platform';
+import { FocusableOption } from '@angular/cdk/a11y';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import { BACKSPACE, DELETE, SPACE } from '@angular/cdk/keycodes';
+import { Platform } from '@angular/cdk/platform';
 import {
   ContentChild,
   Directive,
@@ -39,8 +39,8 @@ import {
   RippleRenderer,
   RippleTarget,
 } from '@angular/material/core';
-import {Subject} from 'rxjs';
-import {take} from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 
 /** Represents an event fired on an individual `mat-chip`. */
@@ -64,12 +64,12 @@ export class MatChipSelectionChange {
 // Boilerplate for applying mixins to MatChip.
 /** @docs-private */
 export class MatChipBase {
-  constructor(public _elementRef: ElementRef) {}
+  constructor(public _elementRef: ElementRef) { }
 }
 
 export const _MatChipMixinBase:
-    CanColorCtor & CanDisableRippleCtor & CanDisableCtor & typeof MatChipBase =
-        mixinColor(mixinDisableRipple(mixinDisabled(MatChipBase)), 'primary');
+  CanColorCtor & CanDisableRippleCtor & CanDisableCtor & typeof MatChipBase =
+  mixinColor(mixinDisableRipple(mixinDisabled(MatChipBase)), 'primary');
 
 const CHIP_ATTRIBUTE_NAMES = ['mat-basic-chip'];
 
@@ -79,9 +79,9 @@ const CHIP_ATTRIBUTE_NAMES = ['mat-basic-chip'];
  */
 @Directive({
   selector: 'mat-chip-avatar, [matChipAvatar]',
-  host: {'class': 'mat-chip-avatar'}
+  host: { 'class': 'mat-chip-avatar' }
 })
-export class MatChipAvatar {}
+export class MatChipAvatar { }
 
 /**
  * Dummy directive to add CSS class to chip trailing icon.
@@ -89,9 +89,9 @@ export class MatChipAvatar {}
  */
 @Directive({
   selector: 'mat-chip-trailing-icon, [matChipTrailingIcon]',
-  host: {'class': 'mat-chip-trailing-icon'}
+  host: { 'class': 'mat-chip-trailing-icon' }
 })
-export class MatChipTrailingIcon {}
+export class MatChipTrailingIcon { }
 
 /**
  * Material design styled Chip component. Used inside the MatChipList component.
@@ -118,7 +118,7 @@ export class MatChipTrailingIcon {}
   },
 })
 export class MatChip extends _MatChipMixinBase implements FocusableOption, OnDestroy, CanColor,
-    CanDisable, CanDisableRipple, RippleTarget {
+  CanDisable, CanDisableRipple, RippleTarget {
 
   /** Reference to the RippleRenderer for the chip. */
   private _chipRipple: RippleRenderer;
@@ -209,7 +209,7 @@ export class MatChip extends _MatChipMixinBase implements FocusableOption, OnDes
 
   /** Emitted when the chip is selected or deselected. */
   @Output() readonly selectionChange: EventEmitter<MatChipSelectionChange> =
-      new EventEmitter<MatChipSelectionChange>();
+    new EventEmitter<MatChipSelectionChange>();
 
   /** Emitted when the chip is destroyed. */
   @Output() readonly destroyed: EventEmitter<MatChipEvent> = new EventEmitter<MatChipEvent>();
@@ -223,9 +223,9 @@ export class MatChip extends _MatChipMixinBase implements FocusableOption, OnDes
   }
 
   constructor(public _elementRef: ElementRef,
-              private _ngZone: NgZone,
-              platform: Platform,
-              @Optional() @Inject(MAT_RIPPLE_GLOBAL_OPTIONS) globalOptions: RippleGlobalOptions) {
+    private _ngZone: NgZone,
+    platform: Platform,
+    @Optional() @Inject(MAT_RIPPLE_GLOBAL_OPTIONS) globalOptions: RippleGlobalOptions) {
     super(_elementRef);
 
     this._addHostClassName();
@@ -245,7 +245,9 @@ export class MatChip extends _MatChipMixinBase implements FocusableOption, OnDes
 
   _addHostClassName() {
     // Add class for the different chips
-    for (const attr of CHIP_ATTRIBUTE_NAMES) {
+    // for (const attr of CHIP_ATTRIBUTE_NAMES) {
+    for (let i = 0, l = CHIP_ATTRIBUTE_NAMES.length; i < l; i++) {
+      const attr = CHIP_ATTRIBUTE_NAMES[i];
       if (this._elementRef.nativeElement.hasAttribute(attr) ||
         this._elementRef.nativeElement.tagName.toLowerCase() === attr) {
         (this._elementRef.nativeElement as HTMLElement).classList.add(attr);
@@ -256,7 +258,7 @@ export class MatChip extends _MatChipMixinBase implements FocusableOption, OnDes
   }
 
   ngOnDestroy() {
-    this.destroyed.emit({chip: this});
+    this.destroyed.emit({ chip: this });
     this._chipRipple._removeTriggerEvents();
   }
 
@@ -295,7 +297,7 @@ export class MatChip extends _MatChipMixinBase implements FocusableOption, OnDes
   focus(): void {
     if (!this._hasFocus) {
       this._elementRef.nativeElement.focus();
-      this._onFocus.next({chip: this});
+      this._onFocus.next({ chip: this });
     }
     this._hasFocus = true;
   }
@@ -308,7 +310,7 @@ export class MatChip extends _MatChipMixinBase implements FocusableOption, OnDes
    */
   remove(): void {
     if (this.removable) {
-      this.removed.emit({chip: this});
+      this.removed.emit({ chip: this });
     }
   }
 
@@ -358,7 +360,7 @@ export class MatChip extends _MatChipMixinBase implements FocusableOption, OnDes
       .subscribe(() => {
         this._ngZone.run(() => {
           this._hasFocus = false;
-          this._onBlur.next({chip: this});
+          this._onBlur.next({ chip: this });
         });
       });
   }
@@ -394,7 +396,7 @@ export class MatChip extends _MatChipMixinBase implements FocusableOption, OnDes
   }
 })
 export class MatChipRemove {
-  constructor(protected _parentChip: MatChip) {}
+  constructor(protected _parentChip: MatChip) { }
 
   /** Calls the parent chip's public `remove()` method if applicable. */
   _handleClick(event: Event): void {

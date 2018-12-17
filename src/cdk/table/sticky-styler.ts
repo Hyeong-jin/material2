@@ -10,7 +10,7 @@
  * Directions that can be used when setting sticky positioning.
  * @docs-private
  */
-import {Direction} from '@angular/cdk/bidi';
+import { Direction } from '@angular/cdk/bidi';
 
 export type StickyDirection = 'top' | 'bottom' | 'left' | 'right';
 
@@ -35,9 +35,9 @@ export class StickyStyler {
    * @param _isBrowser Whether the table is currently being rendered on the server or the client.
    */
   constructor(private isNativeHtmlTable: boolean,
-              private stickCellCss: string,
-              public direction: Direction,
-              private _isBrowser = true) { }
+    private stickCellCss: string,
+    public direction: Direction,
+    private _isBrowser = true) { }
 
   /**
    * Clears the sticky positioning styles from the row and its cells by resetting the `position`
@@ -46,7 +46,9 @@ export class StickyStyler {
    * @param stickyDirections The directions that should no longer be set as sticky on the rows.
    */
   clearStickyPositioning(rows: HTMLElement[], stickyDirections: StickyDirection[]) {
-    for (const row of rows) {
+    // for (const row of rows) {
+    for (let i = 0, l = rows.length; i < l; i++) {
+      const row = rows[i];
       // If the row isn't an element (e.g. if it's an `ng-container`),
       // it won't have inline styles or `children` so we skip it.
       if (row.nodeType !== row.ELEMENT_NODE) {
@@ -72,9 +74,9 @@ export class StickyStyler {
    *     in this index position should be stuck to the end of the row.
    */
   updateStickyColumns(
-      rows: HTMLElement[], stickyStartStates: boolean[], stickyEndStates: boolean[]) {
+    rows: HTMLElement[], stickyStartStates: boolean[], stickyEndStates: boolean[]) {
     const hasStickyColumns =
-        stickyStartStates.some(state => state) || stickyEndStates.some(state => state);
+      stickyStartStates.some(state => state) || stickyEndStates.some(state => state);
     if (!rows.length || !hasStickyColumns || !this._isBrowser) {
       return;
     }
@@ -87,7 +89,9 @@ export class StickyStyler {
     const endPositions = this._getStickyEndColumnPositions(cellWidths, stickyEndStates);
     const isRtl = this.direction === 'rtl';
 
-    for (const row of rows) {
+    // for (const row of rows) {
+    for (let i = 0, l = rows.length; i < l; i++) {
+      const row = rows[i];
       for (let i = 0; i < numCells; i++) {
         const cell = row.children[i] as HTMLElement;
         if (stickyStartStates[i]) {
@@ -173,7 +177,10 @@ export class StickyStyler {
    * sticky position if there are no more directions.
    */
   _removeStickyStyle(element: HTMLElement, stickyDirections: StickyDirection[]) {
-    for (const dir of stickyDirections) {
+    // for (const dir of stickyDirections) {
+    for (let i = 0, l = stickyDirections.length; i < l; i++) {
+      const dir = stickyDirections[i];
+
       element.style[dir] = '';
     }
     element.style.zIndex = this._getCalculatedZIndex(element);
@@ -219,7 +226,10 @@ export class StickyStyler {
     };
 
     let zIndex = 0;
-    for (const dir of STICKY_DIRECTIONS) {
+    // for (const dir of STICKY_DIRECTIONS) {
+    for (let i = 0, l = STICKY_DIRECTIONS.length; i < l; i++) {
+      const dir = STICKY_DIRECTIONS[i];
+
       if (element.style[dir]) {
         zIndex += zIndexIncrements[dir];
       }

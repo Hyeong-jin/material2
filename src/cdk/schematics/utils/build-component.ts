@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {strings, template as interpolateTemplate} from '@angular-devkit/core';
+import { strings, template as interpolateTemplate } from '@angular-devkit/core';
 import {
   apply,
   branchAndMerge,
@@ -21,24 +21,24 @@ import {
   Tree,
   url,
 } from '@angular-devkit/schematics';
-import {FileSystemSchematicContext} from '@angular-devkit/schematics/tools';
-import {Schema as ComponentOptions} from '@schematics/angular/component/schema';
+import { FileSystemSchematicContext } from '@angular-devkit/schematics/tools';
+import { Schema as ComponentOptions } from '@schematics/angular/component/schema';
 import {
   addDeclarationToModule,
   addEntryComponentToModule,
   addExportToModule,
 } from '@schematics/angular/utility/ast-utils';
-import {InsertChange} from '@schematics/angular/utility/change';
-import {getWorkspace} from '@schematics/angular/utility/config';
-import {buildRelativePath, findModuleFromOptions} from '@schematics/angular/utility/find-module';
-import {parseName} from '@schematics/angular/utility/parse-name';
-import {buildDefaultPath} from '@schematics/angular/utility/project';
-import {validateHtmlSelector, validateName} from '@schematics/angular/utility/validation';
-import {readFileSync, statSync} from 'fs';
-import {dirname, join, resolve} from 'path';
-import {getProjectFromWorkspace} from './get-project';
-import {getDefaultComponentOptions} from './schematic-options';
-import {ts} from './version-agnostic-typescript';
+import { InsertChange } from '@schematics/angular/utility/change';
+import { getWorkspace } from '@schematics/angular/utility/config';
+import { buildRelativePath, findModuleFromOptions } from '@schematics/angular/utility/find-module';
+import { parseName } from '@schematics/angular/utility/parse-name';
+import { buildDefaultPath } from '@schematics/angular/utility/project';
+import { validateHtmlSelector, validateName } from '@schematics/angular/utility/validation';
+import { readFileSync, statSync } from 'fs';
+import { dirname, join, resolve } from 'path';
+import { getProjectFromWorkspace } from './get-project';
+import { getDefaultComponentOptions } from './schematic-options';
+import { ts } from './version-agnostic-typescript';
 
 function readIntoSourceFile(host: Tree, modulePath: string) {
   const text = host.read(modulePath);
@@ -72,7 +72,9 @@ function addDeclarationToNgModule(options: ComponentOptions): Rule {
       relativePath);
 
     const declarationRecorder = host.beginUpdate(modulePath);
-    for (const change of declarationChanges) {
+    // for (const change of declarationChanges) {
+    for (let i = 0, l = declarationChanges.length; i < l; i++) {
+      const change = declarationChanges[i];
       if (change instanceof InsertChange) {
         declarationRecorder.insertLeft(change.pos, change.toAdd);
       }
@@ -90,7 +92,9 @@ function addDeclarationToNgModule(options: ComponentOptions): Rule {
         strings.classify(`${options.name}Component`),
         relativePath);
 
-      for (const change of exportChanges) {
+      // for (const change of exportChanges) {
+      for (let i = 0, l = exportChanges.length; i < l; i++) {
+        const change = exportChanges[i];
         if (change instanceof InsertChange) {
           exportRecorder.insertLeft(change.pos, change.toAdd);
         }
@@ -109,7 +113,9 @@ function addDeclarationToNgModule(options: ComponentOptions): Rule {
         strings.classify(`${options.name}Component`),
         relativePath);
 
-      for (const change of entryComponentChanges) {
+      // for (const change of entryComponentChanges) {
+      for (let i = 0, l = entryComponentChanges.length; i < l; i++) {
+        const change = entryComponentChanges[i];
         if (change instanceof InsertChange) {
           entryComponentRecorder.insertLeft(change.pos, change.toAdd);
         }
@@ -154,7 +160,7 @@ function indentTextContent(text: string, numSpaces: number): string {
  * to manually duplicate the file content.
  */
 export function buildComponent(options: ComponentOptions,
-                               additionalFiles: {[key: string]: string} = {}): Rule {
+  additionalFiles: { [key: string]: string } = {}): Rule {
 
   return (host: Tree, context: FileSystemSchematicContext) => {
     const workspace = getWorkspace(host);
@@ -166,8 +172,8 @@ export function buildComponent(options: ComponentOptions,
     // the description path resolved to the factory file, but starting from 6.2.0, it resolves
     // to the factory directory.
     const schematicPath = statSync(context.schematic.description.path).isDirectory() ?
-        context.schematic.description.path :
-        dirname(context.schematic.description.path);
+      context.schematic.description.path :
+      dirname(context.schematic.description.path);
 
     const schematicFilesUrl = './files';
     const schematicFilesPath = resolve(schematicPath, schematicFilesUrl);
@@ -221,7 +227,7 @@ export function buildComponent(options: ComponentOptions,
       options.inlineTemplate ? filter(path => !path.endsWith('.html')) : noop(),
       // Treat the template options as any, because the type definition for the template options
       // is made unnecessarily explicit. Every type of object can be used in the EJS template.
-      template({indentTextContent, resolvedFiles, ...baseTemplateContext} as any),
+      template({ indentTextContent, resolvedFiles, ...baseTemplateContext } as any),
       // TODO(devversion): figure out why we cannot just remove the first parameter
       // See for example: angular-cli#schematics/angular/component/index.ts#L160
       move(null as any, parsedPath.path),

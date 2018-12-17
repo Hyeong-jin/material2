@@ -13,15 +13,15 @@ import {
   TaskId,
   Tree
 } from '@angular-devkit/schematics';
-import {RunSchematicTask, TslintFixTask} from '@angular-devkit/schematics/tasks';
-import {sync as globSync} from 'glob';
-import {getProjectTsConfigPaths} from './project-tsconfig-paths';
-import {TargetVersion} from '../target-version';
-import {createTslintConfig, UpgradeTSLintConfig} from './tslint-config';
+import { RunSchematicTask, TslintFixTask } from '@angular-devkit/schematics/tasks';
+import { sync as globSync } from 'glob';
+import { getProjectTsConfigPaths } from './project-tsconfig-paths';
+import { TargetVersion } from '../target-version';
+import { createTslintConfig, UpgradeTSLintConfig } from './tslint-config';
 
 /** Creates a Angular schematic rule that runs the upgrade for the specified target version. */
 export function createUpgradeRule(targetVersion: TargetVersion,
-                                  upgradeConfig: UpgradeTSLintConfig): Rule {
+  upgradeConfig: UpgradeTSLintConfig): Rule {
   return (tree: Tree, context: SchematicContext) => {
 
     const projectTsConfigPaths = getProjectTsConfigPaths(tree);
@@ -34,7 +34,7 @@ export function createUpgradeRule(targetVersion: TargetVersion,
     // In some applications, developers will have global stylesheets which are not specified in any
     // Angular component. Therefore we glob up all CSS and SCSS files outside of node_modules and
     // dist. The files will be read by the individual stylesheet rules and checked.
-    const extraStyleFiles = globSync('!(node_modules|dist)/**/*.+(css|scss)', {absolute: true});
+    const extraStyleFiles = globSync('!(node_modules|dist)/**/*.+(css|scss)', { absolute: true });
     const tslintConfig = createTslintConfig(targetVersion, {
       // Default options that can be overwritten if specified explicitly. e.g. if the
       // Material update schematic wants to specify a different upgrade data.
@@ -43,7 +43,9 @@ export function createUpgradeRule(targetVersion: TargetVersion,
       ...upgradeConfig,
     });
 
-    for (const tsconfig of projectTsConfigPaths) {
+    // for (const tsconfig of projectTsConfigPaths) {
+    for (let i = 0, l = projectTsConfigPaths.length; i < l; i++) {
+      const tsconfig = projectTsConfigPaths[i];
       // Run the update tslint rules.
       tslintFixTasks.push(context.addTask(new TslintFixTask(tslintConfig, {
         silent: false,

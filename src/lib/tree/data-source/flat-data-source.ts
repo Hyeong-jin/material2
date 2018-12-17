@@ -101,14 +101,15 @@ export class MatTreeFlattener<T, F> {
 
     nodes.forEach(node => {
       let expand = true;
-      for (let i = 0; i <= this.getLevel(node); i++) {
+      const level = this.getLevel(node);
+      for (let i = 0; i <= level; i++) {
         expand = expand && currentExpand[i];
       }
       if (expand) {
         results.push(node);
       }
       if (this.isExpandable(node)) {
-        currentExpand[this.getLevel(node) + 1] = treeControl.isExpanded(node);
+        currentExpand[level + 1] = treeControl.isExpanded(node);
       }
     });
     return results;

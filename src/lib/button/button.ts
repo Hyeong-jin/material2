@@ -6,8 +6,8 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {FocusMonitor} from '@angular/cdk/a11y';
-import {Platform} from '@angular/cdk/platform';
+import { FocusMonitor } from '@angular/cdk/a11y';
+import { Platform } from '@angular/cdk/platform';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -31,7 +31,7 @@ import {
   mixinDisabled,
   mixinDisableRipple,
 } from '@angular/material/core';
-import {ANIMATION_MODULE_TYPE} from '@angular/platform-browser/animations';
+import { ANIMATION_MODULE_TYPE } from '@angular/platform-browser/animations';
 
 /** Default color palette for round buttons (mat-fab and mat-mini-fab) */
 const DEFAULT_ROUND_BUTTON_COLOR = 'accent';
@@ -53,12 +53,12 @@ const BUTTON_HOST_ATTRIBUTES = [
 // Boilerplate for applying mixins to MatButton.
 /** @docs-private */
 export class MatButtonBase {
-  constructor(public _elementRef: ElementRef) {}
+  constructor(public _elementRef: ElementRef) { }
 }
 
 export const _MatButtonMixinBase:
-    CanDisableRippleCtor & CanDisableCtor & CanColorCtor & typeof MatButtonBase =
-        mixinColor(mixinDisabled(mixinDisableRipple(MatButtonBase)));
+  CanDisableRippleCtor & CanDisableCtor & CanColorCtor & typeof MatButtonBase =
+  mixinColor(mixinDisabled(mixinDisableRipple(MatButtonBase)));
 
 /**
  * Material design button.
@@ -80,7 +80,7 @@ export const _MatButtonMixinBase:
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MatButton extends _MatButtonMixinBase
-    implements OnDestroy, CanDisable, CanColor, CanDisableRipple {
+  implements OnDestroy, CanDisable, CanColor, CanDisableRipple {
 
   /** Whether the button is round. */
   readonly isRoundButton: boolean = this._hasHostAttributes('mat-fab', 'mat-mini-fab');
@@ -92,20 +92,22 @@ export class MatButton extends _MatButtonMixinBase
   @ViewChild(MatRipple) ripple: MatRipple;
 
   constructor(elementRef: ElementRef,
-              /**
-               * @deprecated Platform checks for SSR are no longer needed
-               * @breaking-change 8.0.0
-               */
-              // tslint:disable-next-line:no-unused-variable
-              private _platform: Platform,
-              private _focusMonitor: FocusMonitor,
-              // @breaking-change 8.0.0 `_animationMode` parameter to be made required.
-              @Optional() @Inject(ANIMATION_MODULE_TYPE) public _animationMode?: string) {
+    /**
+     * @deprecated Platform checks for SSR are no longer needed
+     * @breaking-change 8.0.0
+     */
+    // tslint:disable-next-line:no-unused-variable
+    private _platform: Platform,
+    private _focusMonitor: FocusMonitor,
+    // @breaking-change 8.0.0 `_animationMode` parameter to be made required.
+    @Optional() @Inject(ANIMATION_MODULE_TYPE) public _animationMode?: string) {
     super(elementRef);
 
     // For each of the variant selectors that is prevent in the button's host
     // attributes, add the correct corresponding class.
-    for (const attr of BUTTON_HOST_ATTRIBUTES) {
+    // for (const attr of BUTTON_HOST_ATTRIBUTES) {
+    for (let i = 0, l = BUTTON_HOST_ATTRIBUTES.length; i < l; i++) {
+      const attr = BUTTON_HOST_ATTRIBUTES[i];
       if (this._hasHostAttributes(attr)) {
         (elementRef.nativeElement as HTMLElement).classList.add(attr);
       }
